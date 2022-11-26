@@ -122,3 +122,11 @@ def add_tree(request):
 
     tree.save()
     return Response(status=201, data={'message': 'Adding new tree to user successfully'})
+
+
+@api_view(['GET'])
+def get_trees_of_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    trees_query = Tree.objects.filter(user=user)
+
+    return Response(status=200, data=trees_query.values())

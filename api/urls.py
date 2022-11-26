@@ -12,5 +12,6 @@ urlpatterns = [
     path('trees', views.get_all_basetrees),
     path('trees/<str:space>', views.get_basetrees_with_space),
     path('tree/<int:id>', views.get_single_basetree),
-    path('add_tree', views.add_tree)
+    path('add_tree', views.add_tree),
+    path('user/<int:user_id>/trees', views.get_trees_of_user)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
