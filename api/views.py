@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User
 from .serializer import UserSerializer
+from django.contrib.auth.hashers import make_password, check_password
 
 
 @api_view(['GET'])
@@ -17,7 +18,29 @@ def login(request):
     username = request.data['username']
     password = request.data['password']
 
-    if username != 'admin' or password != 'admin':
-        return Response(status=401, data={'message': 'Login failed'})
+    user = User.objects.filter(username=username)
+    if not user:
+        return Response(status=403, data=({'message': 'User not found'}))
 
-    return Response(status=200, data={'message': 'Login successfully'})
+    user = user[0]
+    if not check_password(password=password, encoded=user.password):
+        return Response(status=403, data={'message': 'Wrong password'})
+
+    return Response(status=200, data={'message': 'Logging in successfully'})
+
+
+@api_view(['POST'])
+def register(request):
+    try:
+        new_user = User(
+            username=request.data['username'],
+            email=request.data['email'],
+            first_name=request.data['first_name'],
+            last_name=request.data['last_name'],
+            password=make_password(request.data['password']),
+        )
+        new_user.save()
+    except:
+        return Response(status=424, data={'message': 'Registeration failed'})
+
+    return Response(status=201, data={'message': 'Registeration successfully '})
