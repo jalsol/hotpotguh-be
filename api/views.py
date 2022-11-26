@@ -151,4 +151,4 @@ def get_trees_of_user(request, user_id):
             'user_id': obj.user.id,
         })
 
-    return Response(status=200, data=json.dumps(data))
+    return Response(status=200, data=data)
