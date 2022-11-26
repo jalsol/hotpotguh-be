@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import User, Vendor, BaseTree
+from .models import User, Vendor, BaseTree, Tree
 from django.contrib.auth.hashers import make_password, check_password
 
 
@@ -53,6 +53,7 @@ def login(request):
     return Response(status=200, data={
         'message': 'Logging in successfully',
         'token': 'i_love_dnnc',
+        'username':  username,
     })
 
 
@@ -104,3 +105,20 @@ def get_basetrees_with_space(request, space):
 def get_single_basetree(request, id):
     basetree = BaseTree.objects.filter(id=id)
     return Response(status=200, data=basetree.values()[0])
+
+
+@api_view(['POST'])
+def add_tree(request):
+    user_id = request.data['user_id']
+    basetree_id = request.data['tree_id']
+
+    user = User.objects.get(id=user_id)
+    basetree = BaseTree.objects.get(id=basetree_id)
+
+    tree = Tree(
+        base=basetree,
+        user=user,
+    )
+
+    tree.save()
+    return Response(status=201, data={'message': 'Adding new tree to user successfully'})
