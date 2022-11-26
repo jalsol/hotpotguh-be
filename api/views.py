@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User, Vendor, BaseTree, Tree
 from django.contrib.auth.hashers import make_password, check_password
+import json
 
 
 @api_view(['GET'])
@@ -129,4 +130,28 @@ def get_trees_of_user(request, user_id):
     user = User.objects.get(id=user_id)
     trees_query = Tree.objects.filter(user=user)
 
-    return Response(status=200, data=trees_query.values())
+    data = []
+
+    for obj in trees_query:
+        data.append({
+            'id': obj.id,
+            'base':
+                {
+                    'name': obj.base.name,
+                    'space': obj.base.space,
+                    'period': obj.base.period,
+                    'period_display': obj.base.period_display,
+                    'temperature': obj.base.temperature,
+                    'upper_temperature': obj.base.upper_temperature,
+                    'pH_level': obj.base.pH_level,
+                    'upper_pH_level': obj.base.upper_pH_level,
+                    'moisture_level': obj.base.moisture_level,
+                    'upper_moisture_level': obj.base.upper_moisture_level,
+                    'image_path': obj.base.image_path,
+                    'description': obj.base.description
+                },
+            'days_grown': obj.days_grown,
+            'user_id': obj.user.id,
+        })
+
+    return Response(status=200, data=json.dumps(data))
