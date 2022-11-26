@@ -9,6 +9,7 @@ urlpatterns = [
     path('register', views.register),
     path('vendors', views.get_all_vendors),
     path('vendor/<int:id>', views.get_single_vendor),
-    path('basetrees', views.get_all_basetrees),
-    path('basetree/<int:id>', views.get_single_basetree),
+    path('trees', views.get_all_basetrees),
+    path('trees/<str:space>', views.get_basetrees_with_space),
+    path('tree/<int:id>', views.get_single_basetree),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

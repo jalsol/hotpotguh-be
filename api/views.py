@@ -95,6 +95,12 @@ def get_all_basetrees(request):
 
 
 @api_view(['GET'])
+def get_basetrees_with_space(request, space):
+    basetrees = BaseTree.objects.filter(space=space)
+    return Response(status=200, data=basetrees.values())
+
+
+@api_view(['GET'])
 def get_single_basetree(request, id):
     basetree = BaseTree.objects.filter(id=id)
     return Response(status=200, data=basetree.values()[0])
