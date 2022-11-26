@@ -53,7 +53,7 @@ def login(request):
     return Response(status=200, data={
         'message': 'Logging in successfully',
         'token': 'i_love_dnnc',
-        'username':  username,
+        'user_id':  user.id,
     })
 
 
