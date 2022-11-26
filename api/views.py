@@ -87,3 +87,14 @@ def get_single_vendor(request, id):
 @api_view(['POST'])
 def toggle_favorite(request, id):
     pass
+
+
+@api_view(['GET'])
+def get_all_basetrees(request):
+    return Response(status=200, data=BaseTree.objects.all().values())
+
+
+@api_view(['GET'])
+def get_single_basetree(request, id):
+    basetree = BaseTree.objects.filter(id=id)
+    return Response(status=200, data=basetree.values()[0])

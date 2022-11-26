@@ -9,5 +9,6 @@ urlpatterns = [
     path('register', views.register),
     path('vendors', views.get_all_vendors),
     path('vendor/<int:id>', views.get_single_vendor),
-    path('vendor/<int:id>/toggle-fav', views.toggle_favorite),
+    path('basetrees', views.get_all_basetrees),
+    path('basetree/<int:id>', views.get_single_basetree),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
