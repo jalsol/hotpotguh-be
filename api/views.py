@@ -12,10 +12,10 @@ def get_user(request):
     return Response(data=serializer.data, status=200)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def login(request):
-    username = request.query_params['username']
-    password = request.query_params['password']
+    username = request.data['username']
+    password = request.data['password']
 
     if username != 'admin' or password != 'admin':
         return Response(status=401, data={'message': 'Login failed'})
