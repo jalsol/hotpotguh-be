@@ -135,21 +135,18 @@ def get_trees_of_user(request, user_id):
     for obj in trees_query:
         data.append({
             'id': obj.id,
-            'base':
-                {
-                    'name': obj.base.name,
-                    'space': obj.base.space,
-                    'period': obj.base.period,
-                    'period_display': obj.base.period_display,
-                    'temperature': obj.base.temperature,
-                    'upper_temperature': obj.base.upper_temperature,
-                    'pH_level': obj.base.pH_level,
-                    'upper_pH_level': obj.base.upper_pH_level,
-                    'moisture_level': obj.base.moisture_level,
-                    'upper_moisture_level': obj.base.upper_moisture_level,
-                    'image_path': obj.base.image_path,
-                    'description': obj.base.description
-                },
+            'base_name': obj.base.name,
+            'base_space': obj.base.space,
+            'base_period': obj.base.period,
+            'base_period_display': obj.base.period_display,
+            'base_temperature': obj.base.temperature,
+            'base_upper_temperature': obj.base.upper_temperature,
+            'base_pH_level': obj.base.pH_level,
+            'base_upper_pH_level': obj.base.upper_pH_level,
+            'base_moisture_level': obj.base.moisture_level,
+            'base_upper_moisture_level': obj.base.upper_moisture_level,
+            'base_image_path': obj.base.image_path,
+            'base_description': obj.base.description,
             'days_grown': obj.days_grown,
             'user_id': obj.user.id,
         })
