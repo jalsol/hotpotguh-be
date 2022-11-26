@@ -66,7 +66,7 @@ def register(request):
 
 
 @api_view(['GET'])
-def get_all_vendors():
+def get_all_vendors(request):
     return Response(status=200, data=Vendor.objects.all().values())
 
 
