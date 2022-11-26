@@ -38,8 +38,8 @@ def register(request):
         new_user = User(
             username=request.data['username'],
             email=request.data['email'],
-            first_name=request.data['first_name'],
-            last_name=request.data['last_name'],
+            first_name=request.data['firstName'],
+            last_name=request.data['lastName'],
             password=make_password(request.data['password']),
         )
         new_user.save()
