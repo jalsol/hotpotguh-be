@@ -1,32 +1,40 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import User, Vendor
+from .models import User, Vendor, BaseTree
 from django.contrib.auth.hashers import make_password, check_password
 
 
-# @api_view(['GET'])
-# def sekrit(request):
-#     import csv
-#     with open('api/data_shop.csv') as file:
-#         reader = csv.reader(file)
+@api_view(['GET'])
+def sekrit(request):
+    import csv
+    with open('api/data_tree.csv') as file:
+        reader = csv.reader(file)
 
-#         for row in reader:
-#             name, district, address, contact, business_hours, rating = row
-#             vendor = Vendor(
-#                 name=name,
-#                 district=district,
-#                 address=address,
-#                 contact=contact,
-#                 business_hours=business_hours,
-#                 rating=rating,
-#             )
+        for row in reader:
+            print(row)
+            name, space, period, period_display, temperature, upper_temperature, pH_level, upper_pH_level, moisture_level, upper_moisture_level, image_path, description = row
 
-#             vendor.save()
+            base_tree = BaseTree(
+                name=name,
+                space=space,
+                period=period,
+                period_display=period_display,
+                temperature=temperature,
+                upper_temperature=upper_temperature,
+                pH_level=pH_level,
+                upper_pH_level=upper_pH_level,
+                moisture_level=moisture_level,
+                upper_moisture_level=upper_moisture_level,
+                image_path=image_path,
+                description=description
+            )
 
-#     print('done')
+            base_tree.save()
 
-#     return Response(status=200)
+    print('done')
+
+    return Response(status=200)
 
 
 @api_view(['POST'])
@@ -74,3 +82,8 @@ def get_all_vendors(request):
 def get_single_vendor(request, id):
     vendor = Vendor.objects.filter(id=id)
     return Response(status=200, data=vendor.values()[0])
+
+
+@api_view(['POST'])
+def toggle_favorite(request, id):
+    pass

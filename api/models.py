@@ -11,10 +11,11 @@ class User(models.Model):
     password = models.CharField(max_length=256)
 
 
-class Tree(models.Model):
+class BaseTree(models.Model):
     name = models.CharField(max_length=200)
     space = models.CharField(max_length=10)
     period = models.FloatField()
+    period_display = models.CharField(max_length=50)
     temperature = models.IntegerField()
     upper_temperature = models.IntegerField(null=True)
     pH_level = models.FloatField()
@@ -22,9 +23,12 @@ class Tree(models.Model):
     moisture_level = models.CharField(max_length=10)
     upper_moisture_level = models.CharField(max_length=10, null=True)
     image_path = models.CharField(max_length=200)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, default='')
+
+
+class Tree(models.Model):
+    base = models.ForeignKey(BaseTree, on_delete=CASCADE)
     days_grown = models.IntegerField(default=0)
-    milestones = models.CharField(max_length=65535, default='')
     user = models.ForeignKey(User, on_delete=CASCADE, null=True)
 
 
