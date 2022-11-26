@@ -4,7 +4,8 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('', views.get_user),
     path('login', views.login),
     path('register', views.register),
+    path('vendors', views.get_all_vendors),
+    path('vendor/<int:id>', views.get_single_vendor),
 ]

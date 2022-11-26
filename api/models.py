@@ -29,7 +29,10 @@ class Tree(models.Model):
 
 
 class Vendor(models.Model):
+    name = models.CharField(max_length=200)
+    district = models.CharField(max_length=20)
     address = models.CharField(max_length=200)
-    open_hour = models.CharField(max_length=5)
-    closed_hour = models.CharField(max_length=5)
+    contact = models.CharField(max_length=15)
+    business_hours = models.CharField(max_length=5)
+    rating = models.FloatField()
     favorite = models.BooleanField(default=False)
