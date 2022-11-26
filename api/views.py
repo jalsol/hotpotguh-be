@@ -26,7 +26,10 @@ def login(request):
     if not check_password(password=password, encoded=user.password):
         return Response(status=403, data={'message': 'Wrong password'})
 
-    return Response(status=200, data={'message': 'Logging in successfully'})
+    return Response(status=200, data={
+        'message': 'Logging in successfully',
+        'token': 'i_love_dnnc',
+    })
 
 
 @api_view(['POST'])
@@ -43,4 +46,4 @@ def register(request):
     except:
         return Response(status=424, data={'message': 'Registeration failed'})
 
-    return Response(status=201, data={'message': 'Registeration successfully '})
+    return Response(status=201, data={'message': 'Registeration successfully'})
