@@ -147,7 +147,7 @@ def get_trees_of_user(request, user_id):
             'base_upper_moisture_level': obj.base.upper_moisture_level,
             'base_image_path': obj.base.image_path,
             'base_description': obj.base.description,
-            'days_grown': obj.days_grown,
+            'creation_date': obj.creation_date,
             'user_id': obj.user.id,
         })
 
