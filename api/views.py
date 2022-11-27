@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import User, Vendor, BaseTree, Tree
 from django.contrib.auth.hashers import make_password, check_password
-import json
+import datetime
 
 
 @api_view(['GET'])
@@ -152,3 +152,102 @@ def get_trees_of_user(request, user_id):
         })
 
     return Response(status=200, data=data)
+
+
+@api_view(['GET'])
+def check_checklist(request, user_id):
+    user = User.objects.get(id=user_id)
+    trees_query = Tree.objects.filter(user=user)
+
+    payload = []
+
+    for tree in trees_query:
+        tree_payload = {}
+
+        tree_payload['tree_id'] = tree.id
+
+        current_time = datetime.date.today()
+        creation_time = tree.creation_date
+        period_count = (
+            current_time - creation_time).total_seconds() // (60 * 60 * 24 * 7) // tree.base.period
+
+        begin_window = creation_time + \
+            datetime.timedelta(days=(tree.base.period * period_count * 7))
+        end_window = creation_time + \
+            datetime.timedelta(
+                days=(tree.base.period * (period_count + 1) * 7))
+
+        if tree.water_task and (begin_window <= tree.water_task < end_window):
+            tree_payload['water_task'] = 'true'
+        else:
+            tree_payload['water_task'] = 'false'
+
+        if tree.fertilize_task and (begin_window <= tree.fertilize_task < end_window):
+            tree_payload['fertilize_task'] = 'true'
+        else:
+            tree_payload['fertilize_task'] = 'false'
+
+        if tree.sunbathe_task and (begin_window <= tree.sunbathe_task < end_window):
+            tree_payload['sunbathe_task'] = 'true'
+        else:
+            tree_payload['sunbathe_task'] = 'false'
+
+        payload.append(tree_payload)
+
+    return Response(status=200, data=payload)
+
+
+@api_view(['POST'])
+def tick_checklist(request, task_name, tree_id):
+    tree = Tree.objects.get(id=tree_id)
+
+    if task_name == 'water_task':
+        tree.water_task = datetime.date.today()
+    elif task_name == 'fertilize_task':
+        tree.fertilize_task = datetime.date.today()
+    elif task_name == 'sunbathe_task':
+        tree.sunbathe_task = datetime.date.today()
+
+    tree.save()
+
+    return Response(status=200)
+
+
+@api_view(['GET'])
+def check_streak(request, user_id):
+    user = User.objects.get(id=user_id)
+    trees_query = Tree.objects.filter(user=user)
+    lose_streak = False
+
+    for tree in trees_query:
+        current_time = datetime.date.today()
+        creation_time = tree.creation_date
+        period_count = (
+            current_time - creation_time).total_seconds() // (60 * 60 * 24 * 7) // tree.base.period
+
+        begin_window = creation_time + \
+            datetime.timedelta(days=(tree.base.period * period_count * 7))
+        end_window = creation_time + \
+            datetime.timedelta(
+                days=(tree.base.period * (period_count + 1) * 7))
+
+        if not (tree.water_task and (begin_window <= tree.water_task < end_window)):
+            lose_streak = True
+
+        if not (tree.fertilize_task and (begin_window <= tree.fertilize_task < end_window)):
+            lose_streak = True
+
+        if not (tree.sunbathe_task and (begin_window <= tree.sunbathe_task < end_window)):
+            lose_streak = True
+
+        if lose_streak:
+            break
+
+    if lose_streak:
+        user.streak = 0
+    else:
+        user.streak += 1
+
+    user.save()
+
+    return Response(status=200, data={'lose_streak': lose_streak})

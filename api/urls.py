@@ -14,4 +14,8 @@ urlpatterns = [
     path('tree/<int:id>', views.get_single_basetree),
     path('add_tree', views.add_tree),
     path('user/<int:user_id>/trees', views.get_trees_of_user),
+    path('user/<int:user_id>/checklist', views.check_checklist),
+    path('task/<str:task_name>/<int:tree_id>',
+         views.tick_checklist),
+    path('user/<int:user_id>/check-streak', views.check_streak),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import CASCADE
+import datetime
 
 
 class User(models.Model):
@@ -9,6 +10,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     password = models.CharField(max_length=256)
+    streak = models.IntegerField(default=0)
 
 
 class BaseTree(models.Model):
@@ -25,14 +27,15 @@ class BaseTree(models.Model):
     image_path = models.CharField(max_length=200)
     description = models.CharField(max_length=500, default='')
 
-    def __str__(self):
-        return str(self.pk)
-
 
 class Tree(models.Model):
     base = models.ForeignKey(BaseTree, on_delete=CASCADE)
-    days_grown = models.IntegerField(default=0)
+    creation_date = models.DateField(default=datetime.date.today)
     user = models.ForeignKey(User, on_delete=CASCADE, null=True)
+    note = models.CharField(max_length=250, default='')
+    water_task = models.DateField(null=True, default=None)
+    fertilize_task = models.DateField(null=True, default=None)
+    sunbathe_task = models.DateField(null=True, default=None)
 
 
 class Vendor(models.Model):
